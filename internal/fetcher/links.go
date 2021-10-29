@@ -70,8 +70,8 @@ func getLinks(rawurl string) ([]string, error) {
 		return nil, errors.WithMessagef(err, "[%s] cannot extract links from %s",
 			configs.Data.MS["ebc"].Title, rawurl)
 	} else {
-		links = linksFilter(links, `https://www.ebc.mg/[article|lifestyle]+/\d+\b`)
-		links = kickOutLinksMatchPath(links, "articles")
+		links = linksFilter(links,
+			`(?m)https://news.ebc.net.tw/news/[politics|society|business|world|china|living]+/\d+\b`)
 		return gears.StrSliceDeDupl(links), nil
 	}
 }

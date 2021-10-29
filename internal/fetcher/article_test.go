@@ -14,8 +14,8 @@ func TestFetchTitle(t *testing.T) {
 		url   string
 		title string
 	}{
-		{"https://www.ebc.mg/article/3974235", "觀點投書：說好的不是一日球迷呢？台灣體育的卑微"},
-		{"https://www.ebc.mg/article/4018173", "藍綠備戰“中二選區”立委補選　“話題女王”林靜儀聲量高力壓顏寬恒"},
+		{"https://news.ebc.net.tw/news/world/280432", "24歲正妹遭大浪狂襲 健身教練跳海救人也溺斃"},
+		{"https://news.ebc.net.tw/news/business/285302", "離職也有眉角？留意5細節 讓你體面離開、留好印象"},
 	}
 	for _, tc := range tests {
 		a := NewArticle()
@@ -50,8 +50,8 @@ func TestFetchUpdateTime(t *testing.T) {
 		url  string
 		want string
 	}{
-		{"https://www.ebc.mg/article/3974235", "2021-10-09 05:30:01 +0800 UTC"},
-		{"https://www.ebc.mg/article/4018173", "2021-10-29 09:26:40 +0800 UTC"},
+		{"https://news.ebc.net.tw/news/world/280432", "2021-09-28 16:57:00 +0800 UTC"},
+		{"https://news.ebc.net.tw/news/business/285302", "2021-10-29 16:43:00 +0800 UTC"},
 	}
 	var err error
 	for _, tc := range tests {
@@ -84,8 +84,8 @@ func TestFetchContent(t *testing.T) {
 		url  string
 		want string
 	}{
-		{"https://www.ebc.mg/article/3974235", "觀點投書：說好的不是一日球迷呢？台灣體育的卑微"},
-		{"https://www.ebc.mg/article/4018173", "藍綠備戰“中二選區”立委補選　“話題女王”林靜儀聲量高力壓顏寬恒"},
+		{"https://news.ebc.net.tw/news/world/280432", "24歲正妹遭大浪狂襲 健身教練跳海救人也溺斃"},
+		{"https://news.ebc.net.tw/news/business/285259", "股民誤會大了！臉書宣布改名「Meta」 這公司莫名噴漲26%"},
 	}
 	var err error
 
@@ -113,8 +113,8 @@ func TestFetchArticle(t *testing.T) {
 		url string
 		err error
 	}{
-		{"https://www.ebc.mg/article/3974235", ErrTimeOverDays},
-		{"https://www.ebc.mg/article/4018173", nil},
+		{"https://news.ebc.net.tw/news/world/280432", ErrTimeOverDays},
+		{"https://news.ebc.net.tw/news/business/285259", nil},
 	}
 	for _, tc := range tests {
 		a := NewArticle()

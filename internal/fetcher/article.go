@@ -125,10 +125,6 @@ func (a *Article) dail(u string) (*Article, error) {
 		if errors.Is(err, context.DeadlineExceeded) {
 			return nil, errors.WithMessagef(err,
 				"404 on url: %s", u)
-			// if a.requestTimes == 5 {
-			// }
-			// a.requestTimes++
-			// return a.dail(u)
 		}
 		if strings.Contains(err.Error(), "invalid header") {
 			a.Title = a.U.Path
@@ -197,7 +193,7 @@ func (a *Article) fetchTitle() (string, error) {
 			configs.Data.MS["ebc"].Title)
 	}
 	title := n[0].FirstChild.Data
-	rp := strings.NewReplacer("-風傳媒", "")
+	rp := strings.NewReplacer("｜東森新聞", "")
 	title = strings.TrimSpace(rp.Replace(title))
 	return gears.ChangeIllegalChar(title), nil
 }
@@ -210,18 +206,21 @@ func (a *Article) fetchUpdateTime() (*timestamppb.Timestamp, error) {
 
 	t := time.Now() // if no time fetched, return current time
 	var err error
-	n := exhtml.MetasByProperty(a.doc, "article:published_time")
-	if len(n) == 0 {
-		return nil, fmt.Errorf("[%s] fetchUpdateTime error, no meta named date matched: %s",
-			configs.Data.MS["ebc"].Title, a.U.String())
+
+	doc := exhtml.ElementsByTagAndType(a.doc, "script", "application/ld+json")
+	if doc == nil {
+		return nil, fmt.Errorf("[%s] fetchUpdateTime: cannot get target nodes: %s",
+			configs.Data.MS["kyodonews"].Title, a.U.String())
 	}
-	for _, nn := range n {
-		for _, x := range nn.Attr {
-			if x.Key == "content" {
-				t, err = time.Parse(time.RFC3339, x.Val+"+08:00")
+	for _, d := range doc {
+		if d.FirstChild != nil && d.FirstChild.Type == html.TextNode {
+			re := regexp.MustCompile(`(?m)"datePublished":\s*?"([^"]*?)",`)
+			rs := re.FindStringSubmatch(d.FirstChild.Data)
+			if len(rs) == 2 {
+				t, err = time.ParseInLocation("2006/01/02 15:04",
+					rs[1], time.FixedZone("UTC", +8*60*60))
 				if err != nil {
-					return nil, errors.WithMessage(err,
-						"caught meta but no content matched.")
+					return nil, err
 				}
 			}
 		}
@@ -242,18 +241,6 @@ func (a *Article) fetchContent() (string, error) {
 	if a.doc == nil {
 		return "", errors.Errorf("[%s] fetchContent: doc is nil: %s",
 			configs.Data.MS["ebc"].Title, a.U.String())
-	}
-	ignoreN := exhtml.ElementsByTagAndClass(a.doc, "a", "tags_link")
-	for _, v := range ignoreN {
-		if v.FirstChild != nil && v.FirstChild.Type == html.TextNode {
-			for _, kw := range []string{"地方新聞", "運動", "房市",
-				"房地產", "理財", "健康", "證券投資", "藝文",
-				"娛樂", "職場", "歷史"} {
-				if v.FirstChild.Data == kw {
-					return "", ErrIgnoreCate
-				}
-			}
-		}
 	}
 	body := ""
 	bodyN := exhtml.ElementsByTagAndId(a.doc, "div", "CMS_wrapper")
