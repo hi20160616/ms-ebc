@@ -210,7 +210,7 @@ func (a *Article) fetchUpdateTime() (*timestamppb.Timestamp, error) {
 	doc := exhtml.ElementsByTagAndType(a.doc, "script", "application/ld+json")
 	if doc == nil {
 		return nil, fmt.Errorf("[%s] fetchUpdateTime: cannot get target nodes: %s",
-			configs.Data.MS["kyodonews"].Title, a.U.String())
+			configs.Data.MS["ebc"].Title, a.U.String())
 	}
 	for _, d := range doc {
 		if d.FirstChild != nil && d.FirstChild.Type == html.TextNode {
