@@ -84,8 +84,8 @@ func TestFetchContent(t *testing.T) {
 		url  string
 		want string
 	}{
-		{"https://news.ebc.net.tw/news/world/280432", "24歲正妹遭大浪狂襲 健身教練跳海救人也溺斃"},
-		{"https://news.ebc.net.tw/news/business/285259", "股民誤會大了！臉書宣布改名「Meta」 這公司莫名噴漲26%"},
+		{"https://news.ebc.net.tw/news/world/280432", "2021-09-28 16:57:00 +0800 UTC"},
+		{"https://news.ebc.net.tw/news/business/285302", "2021-10-29 16:43:00 +0800 UTC"},
 	}
 	var err error
 
@@ -114,7 +114,7 @@ func TestFetchArticle(t *testing.T) {
 		err error
 	}{
 		{"https://news.ebc.net.tw/news/world/280432", ErrTimeOverDays},
-		{"https://news.ebc.net.tw/news/business/285259", nil},
+		{"https://news.ebc.net.tw/news/living/285775", nil},
 	}
 	for _, tc := range tests {
 		a := NewArticle()

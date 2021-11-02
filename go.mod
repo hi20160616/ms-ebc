@@ -13,7 +13,6 @@ require (
 )
 
 require (
-	github.com/hi20160616/exhtml v0.0.0-20211011024837-0504789de279
 	github.com/hi20160616/gears v0.0.0-20211011123823-9336c3913d20
 	github.com/hycka/gocc v0.0.0-20210322081417-5d0705989987
 )
@@ -28,6 +27,7 @@ require (
 	github.com/gogs/chardet v0.0.0-20191104214054-4b6791f73a28 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.4.0 // indirect
+	github.com/hi20160616/exhtml v0.0.0-20211102022651-1440466f6863 // indirect
 	github.com/json-iterator/go v1.1.10 // indirect
 	github.com/liuzl/cedar-go v0.0.0-20170805034717-80a9c64b256d // indirect
 	github.com/liuzl/da v0.0.0-20180704015230-14771aad5b1d // indirect

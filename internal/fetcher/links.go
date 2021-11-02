@@ -22,11 +22,7 @@ func fetchLinks() ([]string, error) {
 		}
 		rt = append(rt, links...)
 	}
-	rt1 := []string{}
-	for _, v := range rt {
-		rt1 = append(rt1, v+"?mode=whole")
-	}
-	return rt1, nil
+	return rt, nil
 }
 
 // getLinksJson get links from a url that return json data.

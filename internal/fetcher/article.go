@@ -243,7 +243,7 @@ func (a *Article) fetchContent() (string, error) {
 			configs.Data.MS["ebc"].Title, a.U.String())
 	}
 	body := ""
-	bodyN := exhtml.ElementsByTagAndId(a.doc, "div", "CMS_wrapper")
+	bodyN := exhtml.ElementsByTagAttr(a.doc, "span", "data-reactroot", "")
 	if len(bodyN) == 0 {
 		return body, errors.Errorf("no article content matched: %s", a.U.String())
 	}
@@ -257,20 +257,30 @@ func (a *Article) fetchContent() (string, error) {
 				return "", errors.WithMessagef(err,
 					"node render to bytes fail: %s", a.U.String())
 			}
-			repl := strings.NewReplacer("「", "“", "」", "”")
-			x := repl.Replace(buf.String())
+			x := buf.String()
+			if strings.Contains(x, "★【東森財經粉絲團】") ||
+				strings.Contains(x, "💬来当个朋友嘛～") ||
+				strings.Contains(x, "➤") ||
+				strings.Contains(x, "▼") {
+				buf.Reset()
+				continue
+			}
 			re := regexp.MustCompile(`(?m)<p.*?>(.*?)</p>`)
 			x = re.ReplaceAllString(x, "${1}")
 			re = regexp.MustCompile(`(?m)<span.*?>(.*?)</span>`)
 			x = re.ReplaceAllString(x, "${1}")
-			re = regexp.MustCompile(`(?m)(.*?)<a class="notify_wordings".*?</a>(.*?)`)
-			x = re.ReplaceAllString(x, "${1}${2}")
+			re = regexp.MustCompile(`(?m)<em>(.*?)</em>`)
+			x = re.ReplaceAllString(x, "*${1}*")
 			re = regexp.MustCompile(`(?m)<b.*?>(.*?)</b>`)
 			x = re.ReplaceAllString(x, "**${1}**")
 			re = regexp.MustCompile(`(?m)<strong>(.*?)</strong>`)
 			x = re.ReplaceAllString(x, "**${1}**")
-			re = regexp.MustCompile(`(?m)<a .*? href="(?P<href>.*?)".*?>(?P<x>.*?)</a>`)
-			x = re.ReplaceAllString(x, "[${x}](https://www.ebc.mg/${href})")
+			re = regexp.MustCompile(`(?m)<a .*?href="(?P<href>.*?)".*?>(?P<x>.*?)</a>`)
+			x = re.ReplaceAllString(x, "[${x}](${href})")
+			re = regexp.MustCompile(`(?m)<img .*?>`)
+			x = re.ReplaceAllString(x, "")
+			repl := strings.NewReplacer("「", "“", "」", "”", "<p>", "", "</p>", "")
+			x = repl.Replace(x)
 			if strings.TrimSpace(x) != "" {
 				body += x + "  \n"
 			}
