@@ -259,7 +259,7 @@ func (a *Article) fetchContent() (string, error) {
 			}
 			x := buf.String()
 			if strings.Contains(x, "★【東森財經粉絲團】") ||
-				strings.Contains(x, "💬来当个朋友嘛～") ||
+				strings.Contains(x, "💬來當個朋友嘛～") ||
 				strings.Contains(x, "➤") ||
 				strings.Contains(x, "▼") {
 				buf.Reset()

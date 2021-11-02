@@ -115,6 +115,7 @@ func TestFetchArticle(t *testing.T) {
 	}{
 		{"https://news.ebc.net.tw/news/world/280432", ErrTimeOverDays},
 		{"https://news.ebc.net.tw/news/living/285775", nil},
+		{"https://news.ebc.net.tw/news/society/285723", nil},
 	}
 	for _, tc := range tests {
 		a := NewArticle()
