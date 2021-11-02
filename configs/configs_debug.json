@@ -1,0 +1,12 @@
+{
+  "microservice":{
+    "ebc":{
+      "title":"ebc",
+      "domain":"ebc.net.tw",
+      "url":["https://news.ebc.net.tw/realtime"],
+      "addr":":10013",
+      "timeout":"1s",
+      "heartbeat":"5m"
+    }
+  }
+}
